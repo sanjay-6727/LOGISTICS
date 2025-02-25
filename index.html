@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><b>Dynamic Logistics</b></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(45deg, #1a1a1a, #333);
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            animation: slideIn 1s ease-in;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+	/* From Uiverse.io by OnlyCodeChannel */ 
+.searchBox {
+    display: flex;
+    max-width: 650px; /* Increased from 230px */
+    width: 200%; /* Ensures it takes up available space up to max-width */
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    background: #2f3640;
+    border-radius: 50px;
+    position: relative;
+    margin: 0 auto; /* Added to center horizontally */
+    margin-bottom: 45px; /* Added some spacing below */
+}
+
+.searchButton {
+  color: white;
+  position: absolute;
+  right: 8px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #00ffcc;
+  border: 0;
+  display: inline-block;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+}
+/*hover effect*/
+button:hover {
+  color: #fff;
+  background-color: #00FFFF;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 10px 20px;
+  transform: translateY(-3px);
+}
+/*button pressing effect*/
+button:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.searchInput {
+  border: none;
+  background: none;
+  outline: none;
+  color: white;
+  font-size: 15px;
+  padding: 24px 46px 24px 26px;
+}
+
+
+
+        .logo {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00ffcc;
+            animation: pulse 2s infinite;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #00ffcc;
+        }
+
+        /* Main Content */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 20px;
+            background: url('https://source.unsplash.com/random/1920x1080?logistics') center/cover;
+            animation: fadeIn 2s ease-in;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #00ffcc;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .hero-content p {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Floating Logistics Icons */
+        .floating-icon {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            opacity: 0.8;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-icon:nth-child(1) {
+            top: 80%;
+            left: 60%;
+            animation-delay: 0s;
+        }
+
+        .floating-icon:nth-child(2) {
+            top: 60%;
+            right: 37%;
+            animation-delay: 2s;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .services h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #00ffcc;
+            animation: bounceIn 1s;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+        }
+
+        .service-card img {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 150px;
+            border-radius: 10px;
+            z-index: 10;
+            animation: popUp 0.5s ease-in-out;
+        }
+
+        .service-card:hover img {
+            display: block;
+        }
+
+        /* Tracking Section */
+        .tracking {
+            padding: 80px 20px;
+            background: #111;
+            position: relative;
+        }
+
+        .tracking-form {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .tracking-form input {
+            width: 70%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background: #333;
+            color: #fff;
+        }
+
+        .tracking-form button {
+            padding: 15px 30px;
+            background: #00ffcc;
+            border: none;
+            border-radius: 5px;
+            color: #000;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .tracking-form button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Logistics Map Background */
+        .tracking::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://source.unsplash.com/random/1920x1080?map') center/cover;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+            background: #1a1a1a;
+            position: relative;
+        }
+
+        footer .social-icons {
+            margin-top: 20px;
+        }
+
+        footer .social-icons img {
+            width: 40px;
+            margin: 0 10px;
+            transition: transform 0.3s;
+        }
+
+        footer .social-icons img:hover {
+            transform: scale(1.2);
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            60% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes popUp {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Dynamic Logistics</div>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#tracking">Tracking</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+	
+    <section class="hero" id="home">
+        <div class="hero-content">
+	<!-- From Uiverse.io by OnlyCodeChannel --> 
+<div class="searchBox">
+
+            <input class="searchInput" type="text" name="" placeholder="Search something">
+            <button class="searchButton" href="#">
+                   
+                  
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
+  <g clip-path="url(#clip0_2_17)">
+    <g filter="url(#filter0_d_2_17)">
+      <path d="M23.7953 23.9182L19.0585 19.1814M19.0585 19.1814C19.8188 18.4211 20.4219 17.5185 20.8333 16.5251C21.2448 15.5318 21.4566 14.4671 21.4566 13.3919C21.4566 12.3167 21.2448 11.252 20.8333 10.2587C20.4219 9.2653 19.8188 8.36271 19.0585 7.60242C18.2982 6.84214 17.3956 6.23905 16.4022 5.82759C15.4089 5.41612 14.3442 5.20435 13.269 5.20435C12.1938 5.20435 11.1291 5.41612 10.1358 5.82759C9.1424 6.23905 8.23981 6.84214 7.47953 7.60242C5.94407 9.13789 5.08145 11.2204 5.08145 13.3919C5.08145 15.5634 5.94407 17.6459 7.47953 19.1814C9.01499 20.7168 11.0975 21.5794 13.269 21.5794C15.4405 21.5794 17.523 20.7168 19.0585 19.1814Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" shape-rendering="crispEdges"></path>
+    </g>
+  </g>
+  <defs>
+    <filter id="filter0_d_2_17" x="-0.418549" y="3.70435" width="29.7139" height="29.7139" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></feColorMatrix>
+      <feOffset dy="4"></feOffset>
+      <feGaussianBlur stdDeviation="2"></feGaussianBlur>
+      <feComposite in2="hardAlpha" operator="out"></feComposite>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_17"></feBlend>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_17" result="shape"></feBlend>
+    </filter>
+    <clipPath id="clip0_2_17">
+      <rect width="28.0702" height="28.0702" fill="white" transform="translate(0.403503 0.526367)"></rect>
+    </clipPath>
+  </defs>
+</svg>
+                     
+
+            </button>
+        </div>
+
+
+        
+            <h1>Fast. Reliable. Logistics.</h1>
+            <p>Delivering your goods with speed and precision across the globe.</p>
+        </div>
+        <img src="https://imgs.search.brave.com/Q0MHe-UoUyUULAbem08fySs0Wrt2drKdI-zMmQy68QQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudmV4ZWxzLmNv/bS9tZWRpYS91c2Vy/cy8zLzE0NjQ1MS9p/c29sYXRlZC9wcmV2/aWV3L2QwM2M5ZGUx/OGRiMjI2YTgyM2Q1/YWRiMzM3NzgyZjg5/LW9wZW4tYm94LXdp/dGgtcGFja2FnZS1z/aWducy5wbmc" class="floating-icon block;">
+        
+    </section>
+	
+    <section class="services" id="services">
+        <h2>Our Services</h2>
+        <div class="service-grid">
+            <div class="service-card">
+                <h3>Global Shipping</h3>
+                <p>Worldwide delivery with real-time tracking</p>
+                <img src="https://source.unsplash.com/random/300x200?shipping">
+            </div>
+            <div class="service-card">
+                <h3>Warehousing</h3>
+                <p>Secure storage solutions for your goods</p>
+                <img src="https://source.unsplash.com/random/300x200?warehouse">
+            </div>
+            <div class="service-card">
+                <h3>Express Delivery</h3>
+                <p>Same-day and next-day delivery options</p>
+                <img src="https://source.unsplash.com/random/300x200?delivery">
+            </div>
+        </div>
+    </section>
+
+    <section class="tracking" id="tracking">
+        <div class="tracking-form">
+            <h2>Track Your Shipment</h2>
+            <input type="text" placeholder="Enter Tracking Number">
+            <button>Track Now</button>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <p>© 2025 Dynamic Logistics. All rights reserved.</p>
+        <p>Contact: info@dynamiclogistics.com | +1-555-123-4567</p>
+        <div class="social-icons">
+            <img src="https://freepnglogo.com/images/all_img/facebook-logo.png" alt="Facebook">
+            <img src="https://freepnglogo.com/images/all_img/1691832708new-twitter-x-logo-white.png" alt="Twitter">
+            <img src="https://freepnglogo.com/images/all_img/1715491568linkedin-icon-png.png" alt="LinkedIn">
+        </div>
+    </footer>
+</body>
+</html>
