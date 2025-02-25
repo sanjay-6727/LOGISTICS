@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,7 +13,7 @@
         box-sizing: border-box;
         font-family: Arial, sans-serif;
       }
-
+      
       body {
         background: #000;
         color: #fff;
@@ -22,13 +23,26 @@
 
       /* Header Styles */
       header {
-        background: linear-gradient(45deg, #1a1a1a, #333);
+        background: linear-gradient(45deg, #1a1a1a, #333, #1a1a1a);
+        background-size: 200% 200%;
         padding: 20px;
         position: fixed;
         width: 100%;
         top: 0;
         z-index: 1000;
-        animation: slideIn 1s ease-in;
+        animation: slideIn 1s ease-in, gradientShift 5s ease infinite;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
       }
 
       nav {
@@ -38,37 +52,68 @@
         max-width: 1200px;
         margin: 0 auto;
       }
-      /* From Uiverse.io by OnlyCodeChannel */
+
       .searchBox {
         display: flex;
-        max-width: 650px; /* Increased from 230px */
-        width: 200%; /* Ensures it takes up available space up to max-width */
+        max-width: 650px;
+        width: 200%;
         align-items: center;
         justify-content: space-between;
         gap: 25px;
         background: #2f3640;
         border-radius: 50px;
         position: relative;
-        margin: 0 auto; /* Added to center horizontally */
-        margin-bottom: 45px; /* Added some spacing below */
+        margin: 0 auto;
+        margin-bottom: 45px;
       }
+
+      .searchBox:focus-within {
+        animation: shake 0.5s;
+      }
+
+      @keyframes shake {
+        0% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        50% {
+          transform: translateX(5px);
+        }
+        75% {
+          transform: translateX(-5px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
       .truck {
   font-size: 50px;
-  position: absolute; /* Changed to absolute to position relative to .hero */
-  top: 20%; /* Positions the truck above the search bar */
-  left: 0; /* Starting position */
-  z-index: 10; /* Ensures it stays above other content */
-  animation: drive 6s linear infinite; /* Animation remains the same */
+  position: absolute;
+  top: 20%;
+  left: 0;
+  z-index: 10;
+  animation: driveBounce 4s linear infinite;
+  color: #00ffcc;
+  text-shadow: 0 0 10px #00ffcc, 0 0 2px #00ffcc, 0 0 3px #00ffcc;
+  filter: drop-shadow(0 0 20px #00ffcc);
 }
 
-@keyframes drive {
+@keyframes driveBounce {
   0% {
-    left: 0; /* Start at the left edge */
+    transform: translateX(0) translateY(0);
+  }
+  -100% {
+    transform: translateX(100vw) translateY(-10px);
   }
   100% {
-    left: calc(100% - 50px); /* Move to the right edge, accounting for truck width */
+    transform: translateX(100vw) translateY(0);
   }
 }
+
+
       .searchButton {
         color: white;
         position: absolute;
@@ -81,14 +126,14 @@
         display: inline-block;
         transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
       }
-      /*hover effect*/
+
       button:hover {
         color: #fff;
         background-color: #00ffff;
         box-shadow: rgba(0, 0, 0, 0.5) 0 10px 20px;
         transform: translateY(-3px);
       }
-      /*button pressing effect*/
+
       button:active {
         box-shadow: none;
         transform: translateY(0);
@@ -142,6 +187,7 @@
           center/cover;
         animation: fadeIn 2s ease-in;
         position: relative;
+        background-attachment: fixed;
       }
 
       .hero-content h1 {
@@ -149,6 +195,30 @@
         margin-bottom: 20px;
         color: #00ffcc;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        overflow: hidden;
+        white-space: nowrap;
+        margin: 0 auto;
+        letter-spacing: 0.15em;
+        animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+      }
+
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+
+      @keyframes blink-caret {
+        from,
+        to {
+          border-color: transparent;
+        }
+        50% {
+          border-color: #00ffcc;
+        }
       }
 
       .hero-content p {
@@ -162,9 +232,17 @@
         position: absolute;
         width: 400px;
         height: 400px;
-        opacity: 0.8;
-        animation: float 6s ease-in-out infinite;
+        opacity: 1;
+        animation: floatVertical 8s ease-in-out infinite;
       }
+
+      @keyframes floatVertical {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); } /* Moves up */
+  100% { transform: translateY(0); } /* Moves back down */
+}
+
+      
 
       .floating-icon:nth-child(1) {
         top: 80%;
@@ -173,8 +251,8 @@
       }
 
       .floating-icon:nth-child(2) {
-        top: 60%;
-        right: 37%;
+        top: 63%;
+        right: 38%;
         animation-delay: 2s;
       }
 
@@ -202,14 +280,14 @@
         background: #1a1a1a;
         padding: 20px;
         border-radius: 10px;
-        transition: transform 0.3s;
-        position: relative;
-        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
+        border: 2px solid transparent;
       }
 
       .service-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+        transform: translateY(-10px) rotate(2deg);
+        box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+        border: 2px solid #00ffcc;
       }
 
       .service-card img {
@@ -260,10 +338,23 @@
         color: #000;
         cursor: pointer;
         transition: transform 0.3s;
+        animation: pulse 2s infinite;
       }
 
       .tracking-form button:hover {
         transform: scale(1.1);
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       /* Logistics Map Background */
@@ -284,8 +375,10 @@
       footer {
         padding: 40px 20px;
         text-align: center;
-        background: #1a1a1a;
+        background: linear-gradient(45deg, #1a1a1a, #333, #1a1a1a);
+        background-size: 200% 200%;
         position: relative;
+        animation: gradientShift 5s ease infinite;
       }
 
       footer .social-icons {
@@ -299,7 +392,17 @@
       }
 
       footer .social-icons img:hover {
-        transform: scale(1.2);
+        animation: bounce 0.5s;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
       }
 
       /* Animations */
@@ -369,13 +472,67 @@
           opacity: 1;
         }
       }
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
+@keyframes glow {
+  0% { text-shadow: 0 0 3px #fff, 0 0 5px #007bff; }
+  50% { text-shadow: 0 0 5px #fff, 0 0 8px #007bff; }
+  100% { text-shadow: 0 0 3px #fff, 0 0 5px #007bff; }
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: 'Montserrat', sans-serif; /* Professional and modern */
+  color: #ffffff;
+  text-align: center;
+  animation: glow 1.5s infinite alternate;
+}
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.bg-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 56.25vw; /* 16:9 Aspect Ratio */
+    min-height: 100vh;
+    min-width: 177.77vh; /* 16:9 Aspect Ratio */
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+.video-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.714); /* Dark overlay */
+}
+
+
+
     </style>
   </head>
   <body>
     <div>
+      
+      <div class="video-container">
+        <iframe class="bg-video" src="https://www.youtube.com/embed/Z8A1TMxR1_I?autoplay=1&mute=1&loop=1&playlist=Z8A1TMxR1_I&controls=0&showinfo=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>
+    </div>
+    
         <header>
           <nav>
-            <div class="logo">Dynamic Logistics</div>
+            <div class="logo">DYNAMIC LOGISTICS</div>
             <ul>
               <li><a href="#home">Home</a></li>
               <li><a href="#services">Services</a></li>
@@ -487,17 +644,17 @@
         <div class="service-card">
           <h3>Global Shipping</h3>
           <p>Worldwide delivery with real-time tracking</p>
-          <img src="https://source.unsplash.com/random/300x200?shipping" />
+
         </div>
         <div class="service-card">
           <h3>Warehousing</h3>
           <p>Secure storage solutions for your goods</p>
-          <img src="https://source.unsplash.com/random/300x200?warehouse" />
+          
         </div>
         <div class="service-card">
           <h3>Express Delivery</h3>
           <p>Same-day and next-day delivery options</p>
-          <img src="https://source.unsplash.com/random/300x200?delivery" />
+          
         </div>
       </div>
     </section>
@@ -530,3 +687,4 @@
     </footer>
   </body>
 </html>
+
