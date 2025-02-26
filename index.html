@@ -2,6 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- AOS Library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><b>Dynamic Logistics</b></title>
@@ -505,10 +510,11 @@
     width: 100vw;
     height: 56.25vw; /* 16:9 Aspect Ratio */
     min-height: 100vh;
-    min-width: 177.77vh; /* 16:9 Aspect Ratio */
+    min-width: 177.77vh; /* Ensures full HD coverage */
     transform: translate(-50%, -50%);
     pointer-events: none;
 }
+
 .video-container::after {
     content: "";
     position: absolute;
@@ -527,8 +533,11 @@
     <div>
       
       <div class="video-container">
-        <iframe class="bg-video" src="https://www.youtube.com/embed/Z8A1TMxR1_I?autoplay=1&mute=1&loop=1&playlist=Z8A1TMxR1_I&controls=0&showinfo=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>
+        <iframe class="bg-video"
+            src="https://www.youtube.com/embed/Z8A1TMxR1_I?autoplay=1&mute=1&loop=1&playlist=Z8A1TMxR1_I&controls=0&showinfo=0&modestbranding=1&vq=hd1080"
+            frameborder="0" allowfullscreen></iframe>
     </div>
+    
     
         <header>
           <nav>
@@ -541,7 +550,7 @@
             </ul>
           </nav>
         </header>
-        <div class="truck">⛟</div>
+      <!--<div class="truck">⛟</div>*-->
     </div>
     
     <section class="hero" id="home">
@@ -685,6 +694,7 @@
         />
       </div>
     </footer>
+ 
   </body>
 </html>
 
