@@ -53,7 +53,7 @@
       /* Logo Container for Static Glow Effect */
       .logo-container {
         position: relative;
-        width: 350px; /* Increased to accommodate space */
+        width: 350px;
         height: 60px;
       }
 
@@ -184,7 +184,7 @@
         margin: 0 auto;
       }
 
-      /* Floating Logistics Icons */
+      /* Floating Logistics Icons (Reverted to Original) */
       .floating-icon {
         position: absolute;
         width: 400px;
@@ -216,6 +216,7 @@
         padding: 80px 20px;
         max-width: 1200px;
         margin: 0 auto;
+        background: #111;
       }
 
       .services h2 {
@@ -276,17 +277,10 @@
         color: #000;
         cursor: pointer;
         transition: transform 0.3s;
-        animation: pulse 2s infinite;
       }
 
       .tracking-form button:hover {
         transform: scale(1.1);
-      }
-
-      @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-        100% { transform: scale(1); }
       }
 
       /* Footer */
@@ -407,7 +401,7 @@
       </header>
     </div>
     
-    <section class="hero" id="home">
+    <section class="hero" id="home" data-aos="slide-right" data-aos-duration="1000">
       <div class="hero-content">
         <div class="searchBox">
           <input class="searchInput" type="text" name="" placeholder="Search something" />
@@ -442,25 +436,25 @@
       <img src="https://imgs.search.brave.com/Q0MHe-UoUyUULAbem08fySs0Wrt2drKdI-zMmQy68QQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudmV4ZWxzLmNv/bS9tZWRpYS91c2Vy/cy8zLzE0NjQ1MS9p/c29sYXRlZC9wcmV2/aWV3L2QwM2M5ZGUx/OGRiMjI2YTgyM2Q1/YWRiMzM3NzgyZjg5/LW9wZW4tYm94LXdp/dGgtcGFja2FnZS1z/aWducy5wbmc" class="floating-icon block;" />
     </section>
 
-    <section class="services" id="services">
+    <section class="services" id="services" data-aos="slide-left" data-aos-duration="1000">
       <h2>Our Services</h2>
       <div class="service-grid">
-        <div class="service-card">
+        <div class="service-card" data-aos="slide-right" data-aos-delay="100" data-aos-duration="1000">
           <h3>Global Shipping</h3>
           <p>Worldwide delivery with real-time tracking</p>
         </div>
-        <div class="service-card">
+        <div class="service-card" data-aos="slide-left" data-aos-delay="200" data-aos-duration="1000">
           <h3>Warehousing</h3>
           <p>Secure storage solutions for your goods</p>
         </div>
-        <div class="service-card">
+        <div class="service-card" data-aos="slide-right" data-aos-delay="300" data-aos-duration="1000">
           <h3>Express Delivery</h3>
           <p>Same-day and next-day delivery options</p>
         </div>
       </div>
     </section>
 
-    <section class="tracking" id="tracking">
+    <section class="tracking" id="tracking" data-aos="slide-up" data-aos-duration="1000">
       <div class="tracking-form">
         <h2>Track Your Shipment</h2>
         <input type="text" placeholder="Enter Tracking Number" />
@@ -468,7 +462,7 @@
       </div>
     </section>
 
-    <footer id="contact">
+    <footer id="contact" data-aos="slide-down" data-aos-duration="1000">
       <p>© 2025 Dynamic Logistics. All rights reserved.</p>
       <p>Contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a6cfc8c0c9e6c2dfc8c7cbcfc5cac9c1cfd5d2cfc5d588c5c9cb">[email protected]</a> | +1-555-123-4567</p>
       <div class="social-icons">
@@ -479,5 +473,12 @@
     </footer>
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script>
+      // Initialize AOS
+      AOS.init({
+        duration: 1000,
+        once: false, // Animations trigger only once
+      });
+    </script>
   </body>
 </html>
