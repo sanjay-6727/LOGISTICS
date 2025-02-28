@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <!-- AOS Library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -39,15 +37,9 @@
       }
 
       @keyframes gradientShift {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
       }
 
       nav {
@@ -58,6 +50,19 @@
         margin: 0 auto;
       }
 
+      /* Logo Container for Static Glow Effect */
+      .logo-container {
+        position: relative;
+        width: 350px; /* Increased to accommodate space */
+        height: 60px;
+      }
+
+      .logo-svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Search Box and Other Styles */
       .searchBox {
         display: flex;
         max-width: 650px;
@@ -77,47 +82,12 @@
       }
 
       @keyframes shake {
-        0% {
-          transform: translateX(0);
-        }
-        25% {
-          transform: translateX(-5px);
-        }
-        50% {
-          transform: translateX(5px);
-        }
-        75% {
-          transform: translateX(-5px);
-        }
-        100% {
-          transform: translateX(0);
-        }
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        50% { transform: translateX(5px); }
+        75% { transform: translateX(-5px); }
+        100% { transform: translateX(0); }
       }
-
-      .truck {
-  font-size: 50px;
-  position: absolute;
-  top: 20%;
-  left: 0;
-  z-index: 10;
-  animation: driveBounce 4s linear infinite;
-  color: #00ffcc;
-  text-shadow: 0 0 10px #00ffcc, 0 0 2px #00ffcc, 0 0 3px #00ffcc;
-  filter: drop-shadow(0 0 20px #00ffcc);
-}
-
-@keyframes driveBounce {
-  0% {
-    transform: translateX(0) translateY(0);
-  }
-  -100% {
-    transform: translateX(100vw) translateY(-10px);
-  }
-  100% {
-    transform: translateX(100vw) translateY(0);
-  }
-}
-
 
       .searchButton {
         color: white;
@@ -128,7 +98,6 @@
         border-radius: 50%;
         background-color: #00ffcc;
         border: 0;
-        display: inline-block;
         transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
       }
 
@@ -151,13 +120,6 @@
         color: white;
         font-size: 15px;
         padding: 24px 46px 24px 26px;
-      }
-
-      .logo {
-        font-size: 2em;
-        font-weight: bold;
-        color: #00ffcc;
-        animation: pulse 2s infinite;
       }
 
       nav ul {
@@ -188,8 +150,7 @@
         justify-content: center;
         text-align: center;
         padding: 0 20px;
-        background: url("https://source.unsplash.com/random/1920x1080?logistics")
-          center/cover;
+        background: url("https://source.unsplash.com/random/1920x1080?logistics") center/cover;
         animation: fadeIn 2s ease-in;
         position: relative;
         background-attachment: fixed;
@@ -208,22 +169,13 @@
       }
 
       @keyframes typing {
-        from {
-          width: 0;
-        }
-        to {
-          width: 100%;
-        }
+        from { width: 0; }
+        to { width: 100%; }
       }
 
       @keyframes blink-caret {
-        from,
-        to {
-          border-color: transparent;
-        }
-        50% {
-          border-color: #00ffcc;
-        }
+        from, to { border-color: transparent; }
+        50% { border-color: #00ffcc; }
       }
 
       .hero-content p {
@@ -242,12 +194,10 @@
       }
 
       @keyframes floatVertical {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-20px); } /* Moves up */
-  100% { transform: translateY(0); } /* Moves back down */
-}
-
-      
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+        100% { transform: translateY(0); }
+      }
 
       .floating-icon:nth-child(1) {
         top: 80%;
@@ -257,7 +207,7 @@
 
       .floating-icon:nth-child(2) {
         top: 63%;
-        right: 38%;
+        right: 40%;
         animation-delay: 2s;
       }
 
@@ -293,23 +243,6 @@
         transform: translateY(-10px) rotate(2deg);
         box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
         border: 2px solid #00ffcc;
-      }
-
-      .service-card img {
-        display: none;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 200px;
-        height: 150px;
-        border-radius: 10px;
-        z-index: 10;
-        animation: popUp 0.5s ease-in-out;
-      }
-
-      .service-card:hover img {
-        display: block;
       }
 
       /* Tracking Section */
@@ -351,29 +284,9 @@
       }
 
       @keyframes pulse {
-        0% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.1);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
-
-      /* Logistics Map Background */
-      .tracking::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url("https://source.unsplash.com/random/1920x1080?map")
-          center/cover;
-        opacity: 0.1;
-        z-index: 0;
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
       }
 
       /* Footer */
@@ -401,250 +314,132 @@
       }
 
       @keyframes bounce {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-10px);
-        }
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
       }
 
       /* Animations */
       @keyframes slideIn {
-        from {
-          transform: translateY(-100%);
-        }
-        to {
-          transform: translateY(0);
-        }
+        from { transform: translateY(-100%); }
+        to { transform: translateY(0); }
       }
 
       @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      @keyframes pulse {
-        0% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-        100% {
-          transform: scale(1);
-        }
+        from { opacity: 0; }
+        to { opacity: 1; }
       }
 
       @keyframes bounceIn {
-        0% {
-          transform: scale(0.3);
-          opacity: 0;
-        }
-        60% {
-          transform: scale(1.2);
-          opacity: 1;
-        }
-        100% {
-          transform: scale(1);
-        }
+        0% { transform: scale(0.3); opacity: 0; }
+        60% { transform: scale(1.2); opacity: 1; }
+        100% { transform: scale(1); }
       }
 
-      @keyframes float {
-        0% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-20px);
-        }
-        100% {
-          transform: translateY(0);
-        }
+      /* Video Background */
+      .video-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1;
       }
 
-      @keyframes popUp {
-        0% {
-          transform: translate(-50%, -50%) scale(0);
-          opacity: 0;
-        }
-        100% {
-          transform: translate(-50%, -50%) scale(1);
-          opacity: 1;
-        }
+      .bg-video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100vw;
+        height: 56.25vw;
+        min-height: 100vh;
+        min-width: 177.77vh;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
       }
-      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
 
-@keyframes glow {
-  0% { text-shadow: 0 0 3px #fff, 0 0 5px #007bff; }
-  50% { text-shadow: 0 0 5px #fff, 0 0 8px #007bff; }
-  100% { text-shadow: 0 0 3px #fff, 0 0 5px #007bff; }
-}
-
-.logo {
-  font-size: 2rem;
-  font-weight: bold;
-  font-family: 'Montserrat', sans-serif; /* Professional and modern */
-  color: #ffffff;
-  text-align: center;
-  animation: glow 1.5s infinite alternate;
-}
-.video-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: -1;
-}
-
-.bg-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100vw;
-    height: 56.25vw; /* 16:9 Aspect Ratio */
-    min-height: 100vh;
-    min-width: 177.77vh; /* Ensures full HD coverage */
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-}
-
-.video-container::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.714); /* Dark overlay */
-}
-
-
-
+      .video-container::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.714);
+      }
     </style>
   </head>
   <body>
     <div>
-      
       <div class="video-container">
         <iframe class="bg-video"
-            src="https://www.youtube.com/embed/Z8A1TMxR1_I?autoplay=1&mute=1&loop=1&playlist=Z8A1TMxR1_I&controls=0&showinfo=0&modestbranding=1&vq=hd1080"
-            frameborder="0" allowfullscreen></iframe>
-    </div>
-    
-    
-        <header>
-          <nav>
-            <div class="logo">DYNAMIC LOGISTICS</div>
-            <ul>
-              <li><a href="#home">Home</a></li>
-              <li><a href="#services">Services</a></li>
-              <li><a href="#tracking">Tracking</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </nav>
-        </header>
-      <!--<div class="truck">⛟</div>*-->
+          src="https://www.youtube.com/embed/Z8A1TMxR1_I?autoplay=1&mute=1&loop=1&playlist=Z8A1TMxR1_I&controls=0&showinfo=0&modestbranding=1&vq=hd1080"
+          frameborder="0" allowfullscreen></iframe>
+      </div>
+      
+      <header>
+        <nav>
+          <div class="logo-container">
+            <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 60">
+              <defs>
+                <mask id="stroke">
+                  <rect x="0" y="0" width="350" height="60" fill="#000"/>
+                  <text x="0" y="45" font-family="Montserrat, sans-serif" font-size="40" font-weight="bold" fill="#fff" textLength="340">
+                    DYNAMIC LOGISTICS
+                  </text>
+                </mask>
+              </defs>
+              <rect x="0" y="0" width="350" height="60" fill="#050505" mask="url(#stroke)"/>
+              <g style="filter: drop-shadow(0 0 5px #00ffcc);">
+                <text x="0" y="45" font-family="Montserrat, sans-serif" font-size="40" font-weight="bold" fill="none" stroke="#00ffcc" stroke-width="2" stroke-linejoin="round" textLength="340">
+                  DYNAMIC LOGISTICS
+                </text>
+              </g>
+            </svg>
+          </div>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#tracking">Tracking</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </header>
     </div>
     
     <section class="hero" id="home">
-        
       <div class="hero-content">
-        <!-- From Uiverse.io by OnlyCodeChannel -->
-        
         <div class="searchBox">
-          <input
-            class="searchInput"
-            type="text"
-            name=""
-            placeholder="Search something"
-          />
+          <input class="searchInput" type="text" name="" placeholder="Search something" />
           <button class="searchButton" href="#">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="29"
-              height="29"
-              viewBox="0 0 29 29"
-              fill="none"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
               <g clip-path="url(#clip0_2_17)">
                 <g filter="url(#filter0_d_2_17)">
-                  <path
-                    d="M23.7953 23.9182L19.0585 19.1814M19.0585 19.1814C19.8188 18.4211 20.4219 17.5185 20.8333 16.5251C21.2448 15.5318 21.4566 14.4671 21.4566 13.3919C21.4566 12.3167 21.2448 11.252 20.8333 10.2587C20.4219 9.2653 19.8188 8.36271 19.0585 7.60242C18.2982 6.84214 17.3956 6.23905 16.4022 5.82759C15.4089 5.41612 14.3442 5.20435 13.269 5.20435C12.1938 5.20435 11.1291 5.41612 10.1358 5.82759C9.1424 6.23905 8.23981 6.84214 7.47953 7.60242C5.94407 9.13789 5.08145 11.2204 5.08145 13.3919C5.08145 15.5634 5.94407 17.6459 7.47953 19.1814C9.01499 20.7168 11.0975 21.5794 13.269 21.5794C15.4405 21.5794 17.523 20.7168 19.0585 19.1814Z"
-                    stroke="white"
-                    stroke-width="3"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    shape-rendering="crispEdges"
-                  ></path>
+                  <path d="M23.7953 23.9182L19.0585 19.1814M19.0585 19.1814C19.8188 18.4211 20.4219 17.5185 20.8333 16.5251C21.2448 15.5318 21.4566 14.4671 21.4566 13.3919C21.4566 12.3167 21.2448 11.252 20.8333 10.2587C20.4219 9.2653 19.8188 8.36271 19.0585 7.60242C18.2982 6.84214 17.3956 6.23905 16.4022 5.82759C15.4089 5.41612 14.3442 5.20435 13.269 5.20435C12.1938 5.20435 11.1291 5.41612 10.1358 5.82759C9.1424 6.23905 8.23981 6.84214 7.47953 7.60242C5.94407 9.13789 5.08145 11.2204 5.08145 13.3919C5.08145 15.5634 5.94407 17.6459 7.47953 19.1814C9.01499 20.7168 11.0975 21.5794 13.269 21.5794C15.4405 21.5794 17.523 20.7168 19.0585 19.1814Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" shape-rendering="crispEdges"></path>
                 </g>
               </g>
               <defs>
-                <filter
-                  id="filter0_d_2_17"
-                  x="-0.418549"
-                  y="3.70435"
-                  width="29.7139"
-                  height="29.7139"
-                  filterUnits="userSpaceOnUse"
-                  color-interpolation-filters="sRGB"
-                >
-                  <feFlood
-                    flood-opacity="0"
-                    result="BackgroundImageFix"
-                  ></feFlood>
-                  <feColorMatrix
-                    in="SourceAlpha"
-                    type="matrix"
-                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                    result="hardAlpha"
-                  ></feColorMatrix>
+                <filter id="filter0_d_2_17" x="-0.418549" y="3.70435" width="29.7139" height="29.7139" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                  <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                  <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></feColorMatrix>
                   <feOffset dy="4"></feOffset>
                   <feGaussianBlur stdDeviation="2"></feGaussianBlur>
                   <feComposite in2="hardAlpha" operator="out"></feComposite>
-                  <feColorMatrix
-                    type="matrix"
-                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-                  ></feColorMatrix>
-                  <feBlend
-                    mode="normal"
-                    in2="BackgroundImageFix"
-                    result="effect1_dropShadow_2_17"
-                  ></feBlend>
-                  <feBlend
-                    mode="normal"
-                    in="SourceGraphic"
-                    in2="effect1_dropShadow_2_17"
-                    result="shape"
-                  ></feBlend>
+                  <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
+                  <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_17"></feBlend>
+                  <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_17" result="shape"></feBlend>
                 </filter>
                 <clipPath id="clip0_2_17">
-                  <rect
-                    width="28.0702"
-                    height="28.0702"
-                    fill="white"
-                    transform="translate(0.403503 0.526367)"
-                  ></rect>
+                  <rect width="28.0702" height="28.0702" fill="white" transform="translate(0.403503 0.526367)"></rect>
                 </clipPath>
               </defs>
             </svg>
           </button>
         </div>
-
         <h1>Fast. Reliable. Logistics.</h1>
         <p>Delivering your goods with speed and precision across the globe.</p>
       </div>
-
-      <img
-        src="https://imgs.search.brave.com/Q0MHe-UoUyUULAbem08fySs0Wrt2drKdI-zMmQy68QQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudmV4ZWxzLmNv/bS9tZWRpYS91c2Vy/cy8zLzE0NjQ1MS9p/c29sYXRlZC9wcmV2/aWV3L2QwM2M5ZGUx/OGRiMjI2YTgyM2Q1/YWRiMzM3NzgyZjg5/LW9wZW4tYm94LXdp/dGgtcGFja2FnZS1z/aWducy5wbmc"
-        class="floating-icon block;"
-      />
+      <img src="https://imgs.search.brave.com/Q0MHe-UoUyUULAbem08fySs0Wrt2drKdI-zMmQy68QQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudmV4ZWxzLmNv/bS9tZWRpYS91c2Vy/cy8zLzE0NjQ1MS9p/c29sYXRlZC9wcmV2/aWV3L2QwM2M5ZGUx/OGRiMjI2YTgyM2Q1/YWRiMzM3NzgyZjg5/LW9wZW4tYm94LXdp/dGgtcGFja2FnZS1z/aWducy5wbmc" class="floating-icon block;" />
     </section>
 
     <section class="services" id="services">
@@ -653,17 +448,14 @@
         <div class="service-card">
           <h3>Global Shipping</h3>
           <p>Worldwide delivery with real-time tracking</p>
-
         </div>
         <div class="service-card">
           <h3>Warehousing</h3>
           <p>Secure storage solutions for your goods</p>
-          
         </div>
         <div class="service-card">
           <h3>Express Delivery</h3>
           <p>Same-day and next-day delivery options</p>
-          
         </div>
       </div>
     </section>
@@ -678,23 +470,14 @@
 
     <footer id="contact">
       <p>© 2025 Dynamic Logistics. All rights reserved.</p>
-      <p>Contact: info@dynamiclogistics.com | +1-555-123-4567</p>
+      <p>Contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a6cfc8c0c9e6c2dfc8c7cbcfc5cac9c1cfd5d2cfc5d588c5c9cb">[email protected]</a> | +1-555-123-4567</p>
       <div class="social-icons">
-        <img
-          src="https://freepnglogo.com/images/all_img/facebook-logo.png"
-          alt="Facebook"
-        />
-        <img
-          src="https://freepnglogo.com/images/all_img/1691832708new-twitter-x-logo-white.png"
-          alt="Twitter"
-        />
-        <img
-          src="https://freepnglogo.com/images/all_img/1715491568linkedin-icon-png.png"
-          alt="LinkedIn"
-        />
+        <img src="https://freepnglogo.com/images/all_img/facebook-logo.png" alt="Facebook" />
+        <img src="https://freepnglogo.com/images/all_img/1691832708new-twitter-x-logo-white.png" alt="Twitter" />
+        <img src="https://freepnglogo.com/images/all_img/1715491568linkedin-icon-png.png" alt="LinkedIn" />
       </div>
     </footer>
- 
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   </body>
 </html>
-
