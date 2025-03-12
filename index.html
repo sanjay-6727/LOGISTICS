@@ -10,6 +10,35 @@
     <title><b>Dynamic Logistics</b></title>
 
     <style>
+
+  .tracking-status {
+  font-weight: bold;
+  color: #00ffcc;
+  font-size: 1.5em;
+  text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffaa;
+  animation: glowEffect 1.5s infinite alternate;
+}
+
+@keyframes glowEffect {
+  0% { text-shadow: 0 0 0px #00ffcc, 0 0 20px #00ffaa; }
+  100% { text-shadow: 0 0 10px #00ffcc, 0 0 10px #00ffaa; }
+}
+
+#trackingResult {
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(0, 255, 204, 0.1);
+  border: 2px solid #00ffcc;
+  border-radius: 8px;
+  display: inline-block;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+}
+
+
+
+
+
       * {
         margin: 0;
         padding: 0;
@@ -205,6 +234,7 @@
         animation-delay: 0s;
       }
 
+     
       .floating-icon:nth-child(2) {
         top: 63%;
         right: 40%;
@@ -433,8 +463,9 @@
         <h1>Fast. Reliable. Logistics.</h1>
         <p>Delivering your goods with speed and precision across the globe.</p>
       </div>
-      <img src="https://imgs.search.brave.com/Q0MHe-UoUyUULAbem08fySs0Wrt2drKdI-zMmQy68QQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudmV4ZWxzLmNv/bS9tZWRpYS91c2Vy/cy8zLzE0NjQ1MS9p/c29sYXRlZC9wcmV2/aWV3L2QwM2M5ZGUx/OGRiMjI2YTgyM2Q1/YWRiMzM3NzgyZjg5/LW9wZW4tYm94LXdp/dGgtcGFja2FnZS1z/aWducy5wbmc" class="floating-icon block;" />
-    </section>
+     <img src="https://imgs.search.brave.com/Q0MHe-UoUyUULAbem08fySs0Wrt2drKdI-zMmQy68QQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudmV4ZWxzLmNv/bS9tZWRpYS91c2Vy/cy8zLzE0NjQ1MS9p/c29sYXRlZC9wcmV2/aWV3L2QwM2M5ZGUx/OGRiMjI2YTgyM2Q1/YWRiMzM3NzgyZjg5/LW9wZW4tYm94LXdp/dGgtcGFja2FnZS1z/aWducy5wbmc" class="floating-icon block;" />
+     
+  </section>
 
     <section class="services" id="services" data-aos="slide-left" data-aos-duration="1000">
       <h2>Our Services</h2>
@@ -457,10 +488,13 @@
     <section class="tracking" id="tracking" data-aos="slide-up" data-aos-duration="1000">
       <div class="tracking-form">
         <h2>Track Your Shipment</h2>
-        <input type="text" placeholder="Enter Tracking Number" />
-        <button>Track Now</button>
+        <input type="text" id="trackingNumber" placeholder="Enter Tracking Number" onkeypress="handleKeyPress(event)" />  
+        <button onclick="trackShipment()">Track Now</button>
+        <p id="trackingResult"></p>
+
       </div>
     </section>
+    
 
     <footer id="contact" data-aos="slide-down" data-aos-duration="1000">
       <p>© 2025 Dynamic Logistics. All rights reserved.</p>
@@ -480,5 +514,82 @@
         once: false, // Animations trigger only once
       });
     </script>
+    <script>
+      function trackShipment() {
+        let trackingNumber = document.getElementById("trackingNumber").value;
+    
+        fetch("/track", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tracking_number: trackingNumber }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("trackingResult").innerText = 
+            `Status: ${data.status} | Location: ${data.location}`;
+        })
+        .catch(error => console.error("Error:", error));
+      }
+    </script>
+    <script>
+      function trackShipment() {
+        let trackingNumber = document.getElementById("trackingNumber").value;
+        let resultDiv = document.getElementById("trackingResult");
+    
+        fetch("/track", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tracking_number: trackingNumber }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          resultDiv.innerHTML = `<span class="tracking-status">${data.status}</span><br>Location: ${data.location}`;
+    
+          // Add animation effects
+          resultDiv.style.opacity = "0";
+          resultDiv.style.transform = "scale(0.8)";
+          setTimeout(() => {
+            resultDiv.style.opacity = "1";
+            resultDiv.style.transform = "scale(1)";
+          }, 100); // Smooth scaling effect
+        })
+        .catch(error => console.error("Error:", error));
+      }
+    </script>
+   <script>
+    // Function to detect "Enter" key press
+    function handleKeyPress(event) {
+      if (event.key === "Enter") {
+        trackShipment();  // Call the tracking function when Enter is pressed
+      }
+    }
+  
+    function trackShipment() {
+      let trackingNumber = document.getElementById("trackingNumber").value;
+      let resultDiv = document.getElementById("trackingResult");
+  
+      fetch("/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tracking_number: trackingNumber }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        resultDiv.innerHTML = `<span class="tracking-status">${data.status}</span><br>Location: ${data.location}`;
+  
+        // Add animation effects
+        resultDiv.style.opacity = "0";
+        resultDiv.style.transform = "scale(0.8)";
+        setTimeout(() => {
+          resultDiv.style.opacity = "1";
+          resultDiv.style.transform = "scale(1)";
+        }, 100);
+      })
+      .catch(error => console.error("Error:", error));
+    }
+  </script>
+  
+        
+    
   </body>
 </html>
