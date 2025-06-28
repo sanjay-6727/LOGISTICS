@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogisticsPro - Revolutionizing Logistics</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #000000;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 1.1rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover,
+        .navbar .nav-links a.active {
+            color: #00e676;
+        }
+
+        .navbar .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #00e676;
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover::after,
+        .navbar .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.8rem;
+            color: #00e676;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align content to the left */
+            text-align: left; /* Align text to the left */
+            padding: 0 10%;
+            position: relative;
+            background-color: #000000;
+        }
+
+        .spline-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #000000;
+            z-index: 1;
+        }
+
+        .spline-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 13;
+            margin-top: 100px; /* Keep content below the navbar */
+            margin-bottom: auto; /* Ensure content stays at the top */
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            animation: slideInLeft 1s ease-out;
+            text-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            color: #b0bec5;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            animation: typewriter 3s steps(40) 1s 1 normal both, blink 0.75s step-end infinite;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 1px solid #00e676;
+            background: rgba(20, 20, 20, 0.5);
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .hero .cta-buttons {
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically */
+            gap: 1rem;
+            align-items: flex-start; /* Align buttons to the left */
+        }
+
+        .hero .cta-button {
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            color: #fff;
+            padding: 0.9rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 1.4s ease-out;
+        }
+
+        .hero .cta-button.secondary {
+            background: transparent;
+            border: 2px solid #00e676;
+            color: #00e676;
+        }
+
+        .hero .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 230, 118, 0.5);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 10%;
+            background-color: #1a1a1a;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 3rem;
+            font-weight: 600;
+            color: #00e676;
+            margin-bottom: 4rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background: #252525;
+            padding: 2.5rem;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 230, 118, 0.2);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: #00e676;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #e0e0e0;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #b0bec5;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #121212;
+            padding: 3rem 10%;
+            text-align: center;
+            border-top: 1px solid rgba(0, 230, 118, 0.2);
+        }
+
+        .footer p {
+            color: #b0bec5;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer .social-links a {
+            color: #00e676;
+            font-size: 1.5rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .footer .social-links a:hover {
+            color: #0288d1;
+            transform: scale(1.2);
+        }
+
+        .footer .newsletter {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .footer .newsletter SUB {
+            font-size: 1.5rem;
+            color: #00e676;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .footer .newsletter input {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            background: #252525;
+            color: #e0e0e0;
+            margin-bottom: 1rem;
+        }
+
+        .footer .newsletter button {
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .footer .newsletter button:hover {
+            background: linear-gradient(45deg, #0288d1, #00e676);
+        }
+
+        /* Animations */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typewriter {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(20, 20, 20, 0.95);
+                padding: 1rem;
+            }
+
+            .navbar .nav-links.active {
+                display: flex;
+            }
+
+            .navbar .nav-links a {
+                margin: 0.5rem 0;
+                font-size: 1.2rem;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .hero {
+                padding: 0 5%; /* Reduce padding for smaller screens */
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero .cta-button {
+                padding: 0.8rem 2rem;
+                font-size: 1.1rem;
+            }
+
+            .features h2 {
+                font-size: 2rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .hero-content {
+                margin-top: 80px; /* Adjust for smaller screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .hero .cta-button {
+                padding: 0.7rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .features {
+                padding: 3rem 5%;
+            }
+
+            .hero-content {
+                margin-top: 60px; /* Further adjust for very small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">LogisticsPro</div>
+        <div class="nav-links" id="navLinks">
+            <a href="#home" class="active">Home</a>
+            <a href="#features">Features</a>
+            <a href="{{ url_for('login_page') }}">Partner Login</a>
+            <a href="{{ url_for('admin_login') }}">Admin Login</a>
+        </div>
+        <i class="fas fa-bars hamburger" id="hamburger"></i>
+    </nav>
+
+    <section class="hero" id="home">
+        
+        <div class="spline-container">
+            
+            <iframe src="https://my.spline.design/robotfollowcursorforlandingpage-JxvrYQ8wLPQJE5RN3OHXDLv3/" frameborder="0"></iframe>
+        </div>
+        <div class="hero-content">
+            <h1>Revolutionize Your Logistics</h1>
+            <div class="cta-buttons">
+                <a href="{{ url_for('login_page') }}" class="cta-button">Get Started</a>
+                <a href="#features" class="cta-button secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <h2>Why LogisticsPro?</h2>
+        <div class="feature-grid">
+            <div class="feature-card" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-perspective="1000">
+                <i class="fas fa-truck"></i>
+                <h3>Order Management</h3>
+                <p>Place, track, and manage orders effortlessly with our intuitive partner dashboard.</p>
+            </div>
+            <div class="feature-card" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-perspective="1000">
+                <i class="fas fa-chart-line"></i>
+                <h3>Real-Time Analytics</h3>
+                <p>Unlock insights with live data on performance, costs, and delivery metrics.</p>
+            </div>
+            <div class="feature-card" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-perspective="1000">
+                <i class="fas fa-user-shield"></i>
+                <h3>Secure Partner Portal</h3>
+                <p>Access a robust, secure platform tailored for seamless partner operations.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="social-links">
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+        <div class="newsletter">
+            <SUB>Stay Updated</SUB>
+            <form>
+                <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+        <p>© 2025 LogisticsPro. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Navbar active link
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.pageYOffset >= sectionTop - 60) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('fa-bars');
+            hamburger.classList.toggle('fa-times');
+        });
+
+        // Feature card animations
+        const featureCards = document.querySelectorAll('.feature-card');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = `fadeInUp 0.6s ease-out ${index * 0.2}s forwards`;
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        featureCards.forEach(card => observer.observe(card));
+
+        // Newsletter form (prevent default for demo)
+        document.querySelector('.newsletter form').addEventListener('submit', e => {
+            e.preventDefault();
+            alert('Thank you for subscribing!');
+        });
+    </script>
+</body>
+</html>

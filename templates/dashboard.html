@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogisticsPro - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+            padding: 2rem 1rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            color: #b0bec5;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link i {
+            margin-right: 0.8rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(0, 230, 118, 0.1);
+            color: #00e676;
+        }
+
+        .main-content {
+            padding: 2rem;
+            position: relative;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: #0d0d0d;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-menu .btn {
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .user-menu .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 230, 118, 0.1);
+        }
+
+        .stat-card .stat-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0d0d0d;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-change {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .stat-card .stat-change.up {
+            color: #00e676;
+        }
+
+        .stat-card .stat-change.down {
+            color: #f44336;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #0d0d0d;
+        }
+
+        .chart-wrapper {
+            height: 300px;
+            position: relative;
+        }
+
+        .orders-table {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #f5f7fa;
+            font-weight: 600;
+            color: #0d0d0d;
+        }
+
+        tr:hover {
+            background-color: #f5f7fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-badge.pending {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+
+        .status-badge.in-transit {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .status-badge.delivered {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .download-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-control {
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+        }
+
+        .filter-control label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .filter-control select, .filter-control input {
+            padding: 0.6rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background-color: white;
+        }
+
+        .apply-btn {
+            align-self: flex-end;
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .order-form-container, .inventory-form-container {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .order-form-container h2, .inventory-form-container h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #0d0d0d;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #fff;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #00e676;
+            box-shadow: 0 0 5px rgba(0, 230, 118, 0.3);
+        }
+
+        .form-group button {
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        .form-group button:hover {
+            transform: translateY(-2px);
+        }
+
+        .form-group button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-error, .form-success {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .form-error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .form-success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .audio-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        audio {
+            width: 200px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 230, 118, 0.2);
+            opacity: 0.9;
+        }
+
+        audio::-webkit-media-controls-panel {
+            background: #ffffff;
+            color: #333;
+        }
+
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-volume-slider {
+            filter: brightness(0.8);
+        }
+
+        /* Chatbot styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 350px;
+            max-height: 500px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            color: white;
+            padding: 1rem;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .chat-history {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background: #f5f7fa;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            border-radius: 5px;
+            max-width: 80%;
+            white-space: pre-wrap;
+        }
+
+        .message.user {
+            background: #00e676;
+            color: white;
+            margin-left: auto;
+        }
+
+        .message.bot {
+            background: #e0e0e0;
+            color: #333;
+            margin-right: auto;
+        }
+
+        .chat-options {
+            padding: 1rem;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .chat-option-btn {
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
+
+        .chat-option-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .chat-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+        }
+
+        /* Map styles */
+        .map-container {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-top: 1.5rem;
+        }
+
+        #delivery-map {
+            height: 500px;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .map-legend {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            font-size: 0.9rem;
+        }
+
+        .map-legend div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .map-legend .icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            display: inline-block;
+        }
+
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                height: auto;
+                position: static;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .audio-container {
+                right: 10px;
+                bottom: 70px;
+            }
+            .chatbot-container {
+                width: 100%;
+                right: 0;
+                bottom: 0;
+                border-radius: 0;
+            }
+            .order-form-container, .inventory-form-container {
+                max-width: 100%;
+            }
+            #delivery-map {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .user-menu {
+                width: 100%;
+                justify-content: space-between;
+            }
+            audio {
+                width: 150px;
+            }
+            .form-group input, .form-group select {
+                font-size: 0.9rem;
+            }
+            .chatbot-container {
+                max-height: 400px;
+            }
+            .chat-option-btn {
+                font-size: 0.8rem;
+                padding: 0.6rem;
+            }
+            #delivery-map {
+                height: 300px;
+            }
+            .map-legend {
+                bottom: 20px;
+                right: 20px;
+                font-size: 0.8rem;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">LogisticsPro</div>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="place-order">
+                        <i class="fas fa-plus-circle"></i>
+                        Place Order
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="orders">
+                        <i class="fas fa-truck"></i>
+                        Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="routes">
+                        <i class="fas fa-route"></i>
+                        Routes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="analytics">
+                        <i class="fas fa-chart-line"></i>
+                        Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="inventory">
+                        <i class="fas fa-warehouse"></i>
+                        Inventory
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="content-section active" id="dashboard">
+                <div class="header">
+                    <h1>Dashboard Overview</h1>
+                    <div class="user-menu">
+                        <span id="welcome-message">Welcome, Partner</span>
+                        <button class="btn" id="refresh-btn">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Orders</div>
+                        <div class="stat-value" id="total-orders">0</div>
+                        <div class="stat-change up">
+                            <i class="fas fa-arrow-up"></i> 12% from last month
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">On-Time Rate</div>
+                        <div class="stat-value" id="on-time-rate">0%</div>
+                        <div class="stat-change up">
+                            <i class="fas fa-arrow-up"></i> 5% improvement
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Average Cost</div>
+                        <div class="stat-value" id="avg-cost">$0</div>
+                        <div class="stat-change down">
+                            <i class="fas fa-arrow-down"></i> 10% higher
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Cost per KM</div>
+                        <div class="stat-value" id="cost-per-km">$0</div>
+                        <div class="stat-change up">
+                            <i class="fas fa-arrow-up"></i> 8% better
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-control">
+                        <label for="time-period">Time Period</label>
+                        <select id="time-period">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div class="filter-control" id="custom-date-range" style="display: none;">
+                        <label for="start-date">Date Range</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="date" id="start-date">
+                            <span>to</span>
+                            <input type="date" id="end-date">
+                        </div>
+                    </div>
+                    <div class="filter-control">
+                        <label for="vehicle-type">Vehicle Type</label>
+                        <select id="vehicle-type">
+                            <option value="all">All Vehicles</option>
+                            <option value="Van">Van</option>
+                            <option value="Truck">Truck</option>
+                            <option value="Bike">Bike</option>
+                        </select>
+                    </div>
+                    <button class="apply-btn" id="apply-filters">
+                        Apply Filters
+                    </button>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h2>Order Status Distribution</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h2>Daily Orders</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="dailyOrdersChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h2>Fuel Consumption by Vehicle</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="fuelChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h2>On-Time Delivery Rate</h2>
+                        <div class="chart-wrapper">
+                            <img id="on-time-chart-img" src="" alt="On-Time Delivery Rate" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="orders-table">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h2>Recent Orders</h2>
+                        <button class="download-btn" id="download-report">
+                            <i class="fas fa-download"></i> Download Report
+                        </button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Product</th>
+                                <th>Pickup</th>
+                                <th>Delivery</th>
+                                <th>Status</th>
+                                <th>ETA</th>
+                                <th>Vehicle</th>
+                                <th>Cost</th>
+                                <th>Est. Travel Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body">
+                            <!-- Orders will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="content-section" id="place-order">
+                <div class="header">
+                    <h1>Place New Order</h1>
+                </div>
+                <div class="order-form-container">
+                    <h2>Create Order</h2>
+                    <form id="place-order-form">
+                        <div class="form-group">
+                            <label for="product">Product</label>
+                            <input type="text" id="product" placeholder="Enter product name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pickup-location">Pickup Location</label>
+                            <select id="pickup-location" required>
+                                <option value="">Select pickup location</option>
+                                <option value="pallikaranai">Pallikaranai</option>
+                                <option value="tambaram">Tambaram</option>
+                                <option value="delhi">Delhi</option>
+                                <option value="warehouse">Warehouse</option>
+                                <option value="city_center">City Center</option>
+                                <option value="chennai">Chennai</option>
+                                <option value="mumbai">Mumbai</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="delivery-location">Delivery Location</label>
+                            <select id="delivery-location" required>
+                                <option value="">Select delivery location</option>
+                                <option value="pallikaranai">Pallikaranai</option>
+                                <option value="tambaram">Tambaram</option>
+                                <option value="delhi">Delhi</option>
+                                <option value="warehouse">Warehouse</option>
+                                <option value="city_center">City Center</option>
+                                <option value="chennai">Chennai</option>
+                                <option value="mumbai">Mumbai</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="preferred-time">Preferred Delivery Time</label>
+                            <input type="datetime-local" id="preferred-time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="urgency">Urgency</label>
+                            <select id="urgency" required>
+                                <option value="High">High</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight (kg)</label>
+                            <input type="number" id="weight" min="0.1" step="0.1" placeholder="Enter weight in kg" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="volume">Volume (m³)</label>
+                            <input type="number" id="volume" min="0.1" step="0.1" placeholder="Enter volume in m³" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" id="submit-order-btn">Place Order</button>
+                        </div>
+                    </form>
+                    <p id="form-message" class="form-error" style="display: none;"></p>
+                </div>
+            </div>
+
+            <div class="content-section" id="orders">
+                <div class="header">
+                    <h1>Orders</h1>
+                </div>
+                <div class="orders-table">
+                    <h2>All Orders</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Product</th>
+                                <th>Pickup</th>
+                                <th>Delivery</th>
+                                <th>Status</th>
+                                <th>ETA</th>
+                                <th>Vehicle</th>
+                                <th>Cost</th>
+                                <th>Est. Travel Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-orders-table-body">
+                            <!-- Orders will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="content-section" id="routes">
+                <div class="header">
+                    <h1>Routes</h1>
+                </div>
+                <div class="filter-section">
+                    <div class="filter-control">
+                        <label for="routes-time-period">Time Period</label>
+                        <select id="routes-time-period">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div class="filter-control" id="routes-custom-date-range" style="display: none;">
+                        <label for="routes-start-date">Date Range</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="date" id="routes-start-date">
+                            <span>to</span>
+                            <input type="date" id="routes-end-date">
+                        </div>
+                    </div>
+                    <div class="filter-control">
+                        <label for="routes-vehicle-type">Vehicle Type</label>
+                        <select id="routes-vehicle-type">
+                            <option value="all">All Vehicles</option>
+                            <option value="Van">Van</option>
+                            <option value="Truck">Truck</option>
+                            <option value="Bike">Bike</option>
+                        </select>
+                    </div>
+                    <button class="apply-btn" id="routes-apply-filters">
+                        Apply Filters
+                    </button>
+                </div>
+                <div class="map-container">
+                    <h2>Chennai Delivery Routes</h2>
+                    <div id="delivery-map"></div>
+                    <div class="map-legend">
+                        <div><span class="icon" style="background-color: blue;"></span> Truck</div>
+                        <div><span class="icon" style="background-color: green;"></span> Van</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section" id="analytics">
+                <div class="header">
+                    <h1>Analytics</h1>
+                </div>
+                <div class="filter-section">
+                    <div class="filter-control">
+                        <label for="analytics-time-period">Time Period</label>
+                        <select id="analytics-time-period">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div class="filter-control" id="analytics-custom-date-range" style="display: none;">
+                        <label for="analytics-start-date">Date Range</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="date" id="analytics-start-date">
+                            <span>to</span>
+                            <input type="date" id="analytics-end-date">
+                        </div>
+                    </div>
+                    <div class="filter-control">
+                        <label for="analytics-vehicle-type">Vehicle Type</label>
+                        <select id="analytics-vehicle-type">
+                            <option value="all">All Vehicles</option>
+                            <option value="Van">Van</option>
+                            <option value="Truck">Truck</option>
+                            <option value="Bike">Bike</option>
+                        </select>
+                    </div>
+                    <button class="apply-btn" id="analytics-apply-filters">
+                        Apply Filters
+                    </button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Orders</div>
+                        <div class="stat-value" id="analytics-total-orders">0</div>
+                        <div class="stat-change up">
+                            <i class="fas fa-arrow-up"></i> 12% from last month
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">On-Time Rate</div>
+                        <div class="stat-value" id="analytics-on-time-rate">0%</div>
+                        <div class="stat-change up">
+                            <i class="fas fa-arrow-up"></i> 5% improvement
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Average Cost</div>
+                        <div class="stat-value" id="analytics-avg-cost">$0</div>
+                        <div class="stat-change down">
+                            <i class="fas fa-arrow-down"></i> 10% higher
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Cost per KM</div>
+                        <div class="stat-value" id="analytics-cost-per-km">$0</div>
+                        <div class="stat-change up">
+                            <i class="fas fa-arrow-up"></i> 8% better
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Fuel Efficiency (Van)</div>
+                        <div class="stat-value" id="analytics-fuel-efficiency">0 MPG</div>
+                        <div class="stat-change up">
+                            <i class="fas fa-arrow-up"></i> 8% better
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h2>Order Status Distribution</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="analytics-statusChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h2>Daily Orders</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="analytics-dailyOrdersChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h2>Fuel Consumption by Vehicle</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="analytics-fuelChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h2>On-Time Delivery Rate</h2>
+                        <div class="chart-wrapper">
+                            <img id="analytics-on-time-chart-img" src="" alt="On-Time Delivery Rate" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section" id="inventory">
+                <div class="header">
+                    <h1>Inventory</h1>
+                </div>
+                <div class="inventory-form-container">
+                    <h2>Add/Update Inventory</h2>
+                    <form id="inventory-form">
+                        <div class="form-group">
+                            <label for="inventory-product">Product</label>
+                            <input type="text" id="inventory-product" placeholder="Enter product name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inventory-quantity">Quantity</label>
+                            <input type="number" id="inventory-quantity" min="1" placeholder="Enter quantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inventory-location">Location</label>
+                            <select id="inventory-location" required>
+                                <option value="">Select location</option>
+                                <option value="pallikaranai">Pallikaranai</option>
+                                <option value="tambaram">Tambaram</option>
+                                <option value="delhi">Delhi</option>
+                                <option value="warehouse">Warehouse</option>
+                                <option value="city_center">City Center</option>
+                                <option value="chennai">Chennai</option>
+                                <option value="mumbai">Mumbai</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" id="submit-inventory-btn">Add/Update Inventory</button>
+                        </div>
+                    </form>
+                    <p id="inventory-form-message" class="form-error" style="display: none;"></p>
+                </div>
+                <div class="orders-table">
+                    <h2>Inventory List</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Location</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table-body">
+                            <!-- Inventory items will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="content-section" id="settings">
+                <div class="header">
+                    <h1>Settings</h1>
+                </div>
+                <p>Settings configuration coming soon.</p>
+            </div>
+
+            <div class="audio-container">
+                <audio controls autoplay loop volume="0.2">
+                    <source src="/static/audio/background_music.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+
+            <button class="chat-toggle-btn" id="chat-toggle-btn">
+                <i class="fas fa-comments"></i>
+            </button>
+            <div class="chatbot-container" id="chatbot-container" style="display: none;">
+                <div class="chatbot-header">
+                    <span>Logistics Assistant</span>
+                    <button class="close-btn" id="chat-close-btn">×</button>
+                </div>
+                <div class="chat-history" id="chat-history">
+                    <!-- Messages will be populated here -->
+                </div>
+                <div class="chat-options" id="chat-options">
+                    <!-- Option buttons will be populated here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize charts
+            const statusChart = new Chart(
+                document.getElementById('statusChart'),
+                {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Pending', 'In Transit', 'Delivered'],
+                        datasets: [{
+                            data: [0, 0, 0],
+                            backgroundColor: ['#FFA726', '#42A5F5', '#66BB6A']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom' } }
+                    }
+                }
+            );
+
+            const dailyOrdersChart = new Chart(
+                document.getElementById('dailyOrdersChart'),
+                {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Orders',
+                            data: [],
+                            borderColor: '#00E676',
+                            backgroundColor: 'rgba(0, 230, 118, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true } }
+                    }
+                }
+            );
+
+            const fuelChart = new Chart(
+                document.getElementById('fuelChart'),
+                {
+                    type: 'bar',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Fuel Consumption (L)',
+                            data: [],
+                            backgroundColor: '#0288D1'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true } }
+                    }
+                }
+            );
+
+            const analyticsStatusChart = new Chart(
+                document.getElementById('analytics-statusChart'),
+                {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Pending', 'In Transit', 'Delivered'],
+                        datasets: [{
+                            data: [0, 0, 0],
+                            backgroundColor: ['#FFA726', '#42A5F5', '#66BB6A']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom' } }
+                    }
+                }
+            );
+
+            const analyticsDailyOrdersChart = new Chart(
+                document.getElementById('analytics-dailyOrdersChart'),
+                {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Orders',
+                            data: [],
+                            borderColor: '#00E676',
+                            backgroundColor: 'rgba(0, 230, 118, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true } }
+                    }
+                }
+            );
+
+            const analyticsFuelChart = new Chart(
+                document.getElementById('analytics-fuelChart'),
+                {
+                    type: 'bar',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Fuel Consumption (L)',
+                            data: [],
+                            backgroundColor: '#0288D1'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true } }
+                    }
+                }
+            );
+
+            // Map initialization variables
+            let map = null;
+            let vehicles = [];
+            let deliveryPointsLayer = null;
+
+            // Tab navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('data-section');
+                    if (!sectionId) return;
+
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === sectionId) {
+                            section.classList.add('active');
+                        }
+                    });
+
+                    if (sectionId === 'orders') {
+                        fetchOrders();
+                    } else if (sectionId === 'routes') {
+                        initializeMap();
+                        fetchRoutes();
+                    } else if (sectionId === 'analytics') {
+                        fetchAnalytics();
+                    } else if (sectionId === 'inventory') {
+                        fetchInventory();
+                    }
+                });
+            });
+
+            // Event listeners
+            document.getElementById('time-period').addEventListener('change', function() {
+                const customDateRange = document.getElementById('custom-date-range');
+                customDateRange.style.display = this.value === 'custom' ? 'block' : 'none';
+            });
+
+            document.getElementById('routes-time-period').addEventListener('change', function() {
+                const customDateRange = document.getElementById('routes-custom-date-range');
+                customDateRange.style.display = this.value === 'custom' ? 'block' : 'none';
+            });
+
+            document.getElementById('analytics-time-period').addEventListener('change', function() {
+                const customDateRange = document.getElementById('analytics-custom-date-range');
+                customDateRange.style.display = this.value === 'custom' ? 'block' : 'none';
+            });
+
+            document.getElementById('apply-filters').addEventListener('click', fetchDashboardData);
+            document.getElementById('routes-apply-filters').addEventListener('click', fetchRoutes);
+            document.getElementById('analytics-apply-filters').addEventListener('click', fetchAnalytics);
+            document.getElementById('refresh-btn').addEventListener('click', fetchDashboardData);
+            document.getElementById('logout-btn').addEventListener('click', logout);
+            document.getElementById('download-report').addEventListener('click', downloadReport);
+            document.getElementById('place-order-form').addEventListener('submit', placeOrder);
+            document.getElementById('inventory-form').addEventListener('submit', addInventory);
+
+            // Chatbot event listeners
+            const chatToggleBtn = document.getElementById('chat-toggle-btn');
+            const chatbotContainer = document.getElementById('chatbot-container');
+            const chatCloseBtn = document.getElementById('chat-close-btn');
+            const chatHistory = document.getElementById('chat-history');
+            const chatOptions = document.getElementById('chat-options');
+
+            chatToggleBtn.addEventListener('click', () => {
+                if (chatbotContainer.style.display === 'none') {
+                    chatbotContainer.style.display = 'flex';
+                    initChatbot();
+                } else {
+                    chatbotContainer.style.display = 'none';
+                }
+            });
+
+            chatCloseBtn.addEventListener('click', () => {
+                chatbotContainer.style.display = 'none';
+            });
+
+            // Fetch initial data
+            fetchDashboardData();
+            checkSession();
+
+            // Map-related functions
+            function initializeMap() {
+                if (map) return; // Map already initialized
+
+                map = L.map('delivery-map').setView([13.0827, 80.2707], 12);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+            }
+
+            function generateDeliveryPoints(num) {
+                const bounds = {
+                    minLat: 12.9,
+                    maxLat: 13.3,
+                    minLng: 80.1,
+                    maxLng: 80.4
+                };
+                const points = [];
+                for (let i = 0; i < num; i++) {
+                    const lat = bounds.minLat + Math.random() * (bounds.maxLat - bounds.minLat);
+                    const lng = bounds.minLng + Math.random() * (bounds.maxLng - bounds.minLng);
+                    points.push([lat, lng]);
+                }
+                return points;
+            }
+
+            class Vehicle {
+                constructor(type, startPos, deliveryPoints, icon) {
+                    this.type = type;
+                    this.currentPos = startPos;
+                    this.deliveryPoints = deliveryPoints;
+                    this.icon = icon;
+                    this.marker = L.marker(startPos, { icon: icon }).addTo(map);
+                    this.currentPointIndex = 0;
+                    this.isMoving = false;
+                    this.visible = true;
+                }
+
+                setVisibility(visible) {
+                    this.visible = visible;
+                    if (visible) {
+                        if (!map.hasLayer(this.marker)) {
+                            this.marker.addTo(map);
+                        }
+                    } else {
+                        if (map.hasLayer(this.marker)) {
+                            map.removeLayer(this.marker);
+                        }
+                    }
+                }
+
+                startDelivery() {
+                    if (this.currentPointIndex < this.deliveryPoints.length) {
+                        this.moveToNextPoint();
+                    }
+                }
+
+                moveToNextPoint() {
+                    if (this.isMoving || this.currentPointIndex >= this.deliveryPoints.length) return;
+
+                    const nextPoint = this.deliveryPoints[this.currentPointIndex];
+                    this.isMoving = true;
+
+                    const routingControl = L.Routing.control({
+                        waypoints: [
+                            L.latLng(this.currentPos),
+                            L.latLng(nextPoint)
+                        ],
+                        createMarker: () => null,
+                        lineOptions: {
+                            styles: [{ color: this.type === 'truck' ? 'blue' : 'green', opacity: 0.6, weight: 4 }]
+                        },
+                        show: false,
+                        addWaypoints: false
+                    }).addTo(map);
+
+                    routingControl.on('routesfound', (e) => {
+                        const route = e.routes[0].coordinates;
+                        this.animateAlongRoute(route, nextPoint, routingControl);
+                    });
+                }
+
+                animateAlongRoute(route, nextPoint, routingControl) {
+                    let step = 0;
+                    const totalSteps = 100;
+                    const interval = 50;
+
+                    const move = () => {
+                        if (step >= totalSteps) {
+                            this.isMoving = false;
+                            this.currentPos = nextPoint;
+                            this.currentPointIndex++;
+                            map.removeLayer(routingControl);
+                            setTimeout(() => {
+                                this.moveToNextPoint();
+                            }, 2000);
+                            return;
+                        }
+
+                        const t = step / totalSteps;
+                        const index = Math.floor(t * (route.length - 1));
+                        const nextIndex = Math.min(index + 1, route.length - 1);
+                        const frac = (t * (route.length - 1)) - index;
+
+                        const lat = route[index].lat + frac * (route[nextIndex].lat - route[index].lat);
+                        const lng = route[index].lng + frac * (route[nextIndex].lng - route[index].lng);
+                        if (this.visible) {
+                            this.marker.setLatLng([lat, lng]);
+                        }
+
+                        step++;
+                        setTimeout(move, interval);
+                    };
+
+                    move();
+                }
+            }
+
+            function updateMapVehicles(vehicleType) {
+                vehicles.forEach(vehicle => {
+                    const shouldBeVisible = vehicleType === 'all' || vehicle.type.toLowerCase() === vehicleType.toLowerCase();
+                    vehicle.setVisibility(shouldBeVisible);
+                });
+            }
+
+            function fetchRoutes() {
+                const vehicleType = document.getElementById('routes-vehicle-type').value;
+
+                // Initialize map if not already done
+                initializeMap();
+
+                // Clear existing vehicles and delivery points
+                vehicles.forEach(vehicle => {
+                    if (map.hasLayer(vehicle.marker)) {
+                        map.removeLayer(vehicle.marker);
+                    }
+                });
+                if (deliveryPointsLayer) {
+                    map.removeLayer(deliveryPointsLayer);
+                }
+                vehicles = [];
+
+                // Generate delivery points
+                const deliveryPoints = generateDeliveryPoints(20);
+                deliveryPointsLayer = L.layerGroup(
+                    deliveryPoints.map(point =>
+                        L.circleMarker(point, {
+                            radius: 5,
+                            color: 'red',
+                            fillOpacity: 0.8
+                        })
+                    )
+                ).addTo(map);
+
+                // Define vehicle icons
+                const truckIcon = L.divIcon({
+                    html: '<div style="color: blue; font-size: 16px;">■</div>',
+                    className: '',
+                    iconSize: [20, 20]
+                });
+
+                const vanIcon = L.divIcon({
+                    html: '<div style="color: green; font-size: 16px;">■</div>',
+                    className: '',
+                    iconSize: [20, 20]
+                });
+
+                // Initialize vehicles based on filter
+                const allVehicles = [
+                    { type: 'truck', pos: [13.0827, 80.2707], points: deliveryPoints.slice(0, 5), icon: truckIcon },
+                    { type: 'truck', pos: [13.09, 80.28], points: deliveryPoints.slice(5, 10), icon: truckIcon },
+                    { type: 'truck', pos: [13.07, 80.25], points: deliveryPoints.slice(10, 15), icon: truckIcon },
+                    { type: 'van', pos: [13.08, 80.26], points: deliveryPoints.slice(15, 18), icon: vanIcon },
+                    { type: 'van', pos: [13.1, 80.27], points: deliveryPoints.slice(18, 20), icon: vanIcon },
+                    { type: 'van', pos: [13.06, 80.29], points: deliveryPoints.slice(0, 3), icon: vanIcon }
+                ];
+
+                vehicles = allVehicles
+                    .filter(v => vehicleType === 'all' || v.type.toLowerCase() === vehicleType.toLowerCase())
+                    .map(v => new Vehicle(v.type, v.pos, v.points, v.icon));
+
+                vehicles.forEach(vehicle => vehicle.startDelivery());
+            }
+
+            function checkSession() {
+                fetch('/api/orders/history')
+                    .then(response => {
+                        if (response.status === 401) {
+                            window.location.href = '/login';
+                            return Promise.reject('Session expired');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === 'error' && data.message.includes('Session expired')) {
+                            window.location.href = '/login';
+                        }
+                    })
+                    .catch(error => console.error('Session check error:', error));
+            }
+
+            function fetchDashboardData() {
+                const timePeriod = document.getElementById('time-period').value;
+                const vehicleType = document.getElementById('vehicle-type').value;
+                let startDate, endDate;
+
+                if (timePeriod === 'custom') {
+                    startDate = document.getElementById('start-date').value;
+                    endDate = document.getElementById('end-date').value;
+                } else {
+                    const days = parseInt(timePeriod);
+                    endDate = new Date();
+                    startDate = new Date();
+                    startDate.setDate(endDate.getDate() - days);
+                    endDate = endDate.toISOString().split('T')[0];
+                    startDate = startDate.toISOString().split('T')[0];
+                }
+
+                const query = `start_date=${startDate}&end_date=${endDate}&vehicle_type=${vehicleType}`;
+                Promise.all([
+                    fetch(`/api/analytics?${query}`)
+                        .then(response => {
+                            if (response.status === 401) {
+                                window.location.href = '/login';
+                                return Promise.reject('Session expired');
+                            }
+                            return response.json();
+                        }),
+                    fetch(`/api/analytics/charts?${query}`)
+                        .then(response => {
+                            if (response.status === 401) {
+                                window.location.href = '/login';
+                                return Promise.reject('Session expired');
+                            }
+                            return response.json();
+                        }),
+                    fetch('/api/orders/history')
+                        .then(response => {
+                            if (response.status === 401) {
+                                window.location.href = '/login';
+                                return Promise.reject('Session expired');
+                            }
+                            return response.json();
+                        })
+                ])
+                .then(([analyticsData, chartsData, orders]) => {
+                    if (analyticsData.status === 'success') {
+                        updateDashboard(analyticsData);
+                    }
+                    if (chartsData.status === 'success') {
+                        updateDashboardCharts(chartsData);
+                    }
+                    updateOrdersTable(orders, 'orders-table-body');
+                })
+                .catch(error => console.error('Error fetching dashboard data:', error));
+            }
+
+            function fetchAnalytics() {
+                const timePeriod = document.getElementById('analytics-time-period').value;
+                const vehicleType = document.getElementById('analytics-vehicle-type').value;
+                let startDate, endDate;
+
+                if (timePeriod === 'custom') {
+                    startDate = document.getElementById('analytics-start-date').value;
+                    endDate = document.getElementById('analytics-end-date').value;
+                } else {
+                    const days = parseInt(timePeriod);
+                    endDate = new Date();
+                    startDate = new Date();
+                    startDate.setDate(endDate.getDate() - days);
+                    endDate = endDate.toISOString().split('T')[0];
+                    startDate = startDate.toISOString().split('T')[0];
+                }
+
+                const query = `start_date=${startDate}&end_date=${endDate}&vehicle_type=${vehicleType}`;
+                Promise.all([
+                    fetch(`/api/analytics?${query}`)
+                        .then(response => {
+                            if (response.status === 401) {
+                                window.location.href = '/login';
+                                return Promise.reject('Session expired');
+                            }
+                            return response.json();
+                        }),
+                    fetch(`/api/analytics/charts?${query}`)
+                        .then(response => {
+                            if (response.status === 401) {
+                                window.location.href = '/login';
+                                return Promise.reject('Session expired');
+                            }
+                            return response.json();
+                        })
+                ])
+                .then(([analyticsData, chartsData]) => {
+                    if (analyticsData.status === 'success') {
+                        updateAnalytics(analyticsData);
+                    }
+                    if (chartsData.status === 'success') {
+                        updateAnalyticsCharts(chartsData);
+                    }
+                })
+                .catch(error => console.error('Error fetching analytics:', error));
+            }
+
+            function fetchInventory() {
+                fetch('/api/inventory')
+                    .then(response => {
+                        if (response.status === 401) {
+                            window.location.href = '/login';
+                            return Promise.reject('Session expired');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === 'success') {
+                            updateInventoryTable(data.inventory);
+                        } else {
+                            console.error('Error fetching inventory:', data.message);
+                            updateInventoryTable([]);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching inventory:', error);
+                        updateInventoryTable([]);
+                    });
+            }
+
+            function updateDashboard(data) {
+                document.getElementById('total-orders').textContent = data.total_orders;
+                document.getElementById('on-time-rate').textContent = `${data.on_time_rate.toFixed(1)}%`;
+                document.getElementById('avg-cost').textContent = `$${data.avg_cost.toFixed(2)}`;
+                document.getElementById('cost-per-km').textContent = `$${data.cost_per_km.toFixed(2)}`;
+            }
+
+            function updateDashboardCharts(data) {
+                statusChart.data.datasets[0].data = [
+                    data.status_distribution.Pending || 0,
+                    data.status_distribution['In Transit'] || 0,
+                    data.status_distribution.Delivered || 0
+                ];
+                statusChart.update();
+
+                dailyOrdersChart.data.labels = data.daily_orders.map(item => item.date);
+                dailyOrdersChart.data.datasets[0].data = data.daily_orders.map(item => item.count);
+                dailyOrdersChart.update();
+
+                fuelChart.data.labels = data.fuel_by_vehicle.map(item => item.vehicle_type);
+                fuelChart.data.datasets[0].data = data.fuel_by_vehicle.map(item => item.fuel);
+                fuelChart.update();
+
+                document.getElementById('on-time-chart-img').src = `/charts/on_time_rate.png?t=${new Date().getTime()}`;
+            }
+
+            function updateAnalytics(data) {
+                document.getElementById('analytics-total-orders').textContent = data.total_orders;
+                document.getElementById('analytics-on-time-rate').textContent = `${data.on_time_rate.toFixed(1)}%`;
+                document.getElementById('analytics-avg-cost').textContent = `$${data.avg_cost.toFixed(2)}`;
+                document.getElementById('analytics-cost-per-km').textContent = `$${data.cost_per_km.toFixed(2)}`;
+                document.getElementById('analytics-fuel-efficiency').textContent = `${data.fuel_efficiency_by_vehicle.Van?.toFixed(1) || '0'} MPG`;
+            }
+
+            function updateAnalyticsCharts(data) {
+                analyticsStatusChart.data.datasets[0].data = [
+                    data.status_distribution.Pending || 0,
+                    data.status_distribution['In Transit'] || 0,
+                    data.status_distribution.Delivered || 0
+                ];
+                analyticsStatusChart.update();
+
+                analyticsDailyOrdersChart.data.labels = data.daily_orders.map(item => item.date);
+                analyticsDailyOrdersChart.data.datasets[0].data = data.daily_orders.map(item => item.count);
+                analyticsDailyOrdersChart.update();
+
+                analyticsFuelChart.data.labels = data.fuel_by_vehicle.map(item => item.vehicle_type);
+                analyticsFuelChart.data.datasets[0].data = data.fuel_by_vehicle.map(item => item.fuel);
+                analyticsFuelChart.update();
+
+                document.getElementById('analytics-on-time-chart-img').src = `/charts/on_time_rate.png?t=${new Date().getTime()}`;
+            }
+
+            function updateOrdersTable(orders, tableId) {
+                const tableBody = document.getElementById(tableId);
+                tableBody.innerHTML = '';
+
+                orders.slice(0, tableId === 'orders-table-body' ? 10 : undefined).forEach(order => {
+                    const row = document.createElement('tr');
+                    const eta = order.eta ? new Date(order.eta).toLocaleString() : 'N/A';
+                    const statusClass = {
+                        'Pending': 'pending',
+                        'In Transit': 'in-transit',
+                        'Delivered': 'delivered'
+                    }[order.status] || '';
+
+                    row.innerHTML = `
+                        <td>${order.id}</td>
+                        <td>${order.product}</td>
+                        <td>${order.pickup_location}</td>
+                        <td>${order.delivery_location}</td>
+                        <td><span class="status-badge ${statusClass}">${order.status}</span></td>
+                        <td>${eta}</td>
+                        <td>${order.vehicle_type}</td>
+                        <td>$${order.cost.toFixed(2)}</td>
+                        <td>${order.estimated_travel_time ? order.estimated_travel_time.toFixed(2) : 'N/A'} h</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            function updateInventoryTable(items) {
+                const tableBody = document.getElementById('inventory-table-body');
+                tableBody.innerHTML = '';
+
+                items.forEach(item => {
+                    const row = document.createElement('tr');
+                    const lastUpdated = item.last_updated ? new Date(item.last_updated).toLocaleString() : 'N/A';
+                    row.innerHTML = `
+                        <td>${item.product}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.location}</td>
+                        <td>${lastUpdated}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            function placeOrder(e) {
+                e.preventDefault();
+                const form = document.getElementById('place-order-form');
+                const messageEl = document.getElementById('form-message');
+                const submitBtn = document.getElementById('submit-order-btn');
+
+                messageEl.style.display = 'none';
+                submitBtn.disabled = true;
+
+                const formData = {
+                    product: document.getElementById('product').value,
+                    pickup_location: document.getElementById('pickup-location').value,
+                    delivery_location: document.getElementById('delivery-location').value,
+                    preferred_time: new Date(document.getElementById('preferred-time').value).toISOString(),
+                    urgency: document.getElementById('urgency').value,
+                    weight: parseFloat(document.getElementById('weight').value),
+                    volume: parseFloat(document.getElementById('volume').value)
+                };
+
+                fetch('/api/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => {
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                        return Promise.reject('Session expired');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        messageEl.className = 'form-success';
+                        messageEl.textContent = `Order #${data.order_id} placed successfully! ETA: ${new Date(data.eta).toLocaleString()}`;
+                        form.reset();
+                        fetchOrders();
+                    } else {
+                        messageEl.className = 'form-error';
+                        messageEl.textContent = data.message;
+                    }
+                    messageEl.style.display = 'block';
+                })
+                .catch(error => {
+                    messageEl.className = 'form-error';
+                    messageEl.textContent = 'An error occurred. Please try again.';
+                    messageEl.style.display = 'block';
+                    console.error('Error placing order:', error);
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                });
+            }
+
+            function addInventory(e) {
+                e.preventDefault();
+                const form = document.getElementById('inventory-form');
+                const messageEl = document.getElementById('inventory-form-message');
+                const submitBtn = document.getElementById('submit-inventory-btn');
+
+                messageEl.style.display = 'none';
+                submitBtn.disabled = true;
+
+                const formData = {
+                    product: document.getElementById('inventory-product').value,
+                    quantity: parseInt(document.getElementById('inventory-quantity').value),
+                    location: document.getElementById('inventory-location').value
+                };
+
+                fetch('/api/inventory/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => {
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                        return Promise.reject('Session expired');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        messageEl.className = 'form-success';
+                        messageEl.textContent = data.message;
+                        form.reset();
+                        fetchInventory();
+                    } else {
+                        messageEl.className = 'form-error';
+                        messageEl.textContent = data.message;
+                    }
+                    messageEl.style.display = 'block';
+                })
+                .catch(error => {
+                    messageEl.className = 'form-error';
+                    messageEl.textContent = 'An error occurred. Please try again.';
+                    messageEl.style.display = 'block';
+                    console.error('Error adding inventory:', error);
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                });
+            }
+
+            function fetchOrders() {
+                fetch('/api/orders/history')
+                    .then(response => {
+                        if (response.status === 401) {
+                            window.location.href = '/login';
+                            return Promise.reject('Session expired');
+                        }
+                        return response.json();
+                    })
+                    .then(orders => {
+                        updateOrdersTable(orders, 'all-orders-table-body');
+                        updateOrdersTable(orders, 'orders-table-body');
+                    })
+                    .catch(error => console.error('Error fetching orders:', error));
+            }
+
+            function logout() {
+                fetch('/api/logout', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            window.location.href = '/login';
+                        }
+                    })
+                    .catch(error => console.error('Error logging out:', error));
+            }
+
+            function downloadReport() {
+                window.open('/download/report', '_blank');
+            }
+
+            async function initChatbot() {
+                try {
+                    const response = await fetch('/api/chatbot', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({})
+                    });
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                        return;
+                    }
+                    const data = await response.json();
+                    if (data.status === 'success') {
+                        addMessage('bot', data.message);
+                        renderOptions(data.options);
+                    } else {
+                        addMessage('bot', 'Sorry, something went wrong. Please try again.');
+                    }
+                } catch (error) {
+                    addMessage('bot', 'Sorry, something went wrong. Please try again.');
+                    console.error('Error initializing chatbot:', error);
+                }
+            }
+
+            function addMessage(sender, message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                messageDiv.textContent = message;
+                chatHistory.appendChild(messageDiv);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+
+            function renderOptions(options) {
+                chatOptions.innerHTML = '';
+                options.forEach(option => {
+                    const btn = document.createElement('button');
+                    btn.className = 'chat-option-btn';
+                    btn.textContent = option.text;
+                    btn.addEventListener('click', () => handleOptionClick(option.id, option.text));
+                    chatOptions.appendChild(btn);
+                });
+            }
+
+            async function handleOptionClick(optionId, optionText) {
+                addMessage('user', optionText);
+                try {
+                    const response = await fetch('/api/chatbot', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ option: optionId })
+                    });
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                        return;
+                    }
+                    const data = await response.json();
+                    if (data.status === 'success') {
+                        addMessage('bot', data.message);
+                        renderOptions(data.options);
+                    } else {
+                        addMessage('bot', 'Sorry, something went wrong. Please try again.');
+                    }
+                } catch (error) {
+                    addMessage('bot', 'Sorry, something went wrong. Please try again.');
+                    console.error('Error handling option:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

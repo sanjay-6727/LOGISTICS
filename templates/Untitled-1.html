@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chennai Delivery Simulation</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map { height: 600px; width: 100%; }
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            z-index: 1000;
+        }
+        .legend div { margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div class="legend">
+        <div><span style="color: blue;">■</span> Truck</div>
+        <div><span style="color: green;">■</span> Van</div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script>
+        // Initialize map centered on Chennai
+        const map = L.map('map').setView([13.0827, 80.2707], 12);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Define Chennai bounds for random points (approximate)
+        const bounds = {
+            minLat: 12.9,
+            maxLat: 13.3,
+            minLng: 80.1,
+            maxLng: 80.4
+        };
+
+        // Vehicle icons
+        const truckIcon = L.divIcon({
+            html: '<div style="color: blue; font-size: 16px;">■</div>',
+            className: '',
+            iconSize: [20, 20]
+        });
+
+        const vanIcon = L.divIcon({
+            html: '<div style="color: green; font-size: 16px;">■</div>',
+            className: '',
+            iconSize: [20, 20]
+        });
+
+        // Generate random delivery points
+        function generateDeliveryPoints(num) {
+            const points = [];
+            for (let i = 0; i < num; i++) {
+                const lat = bounds.minLat + Math.random() * (bounds.maxLat - bounds.minLat);
+                const lng = bounds.minLng + Math.random() * (bounds.maxLng - bounds.minLng);
+                points.push([lat, lng]);
+            }
+            return points;
+        }
+
+        // Vehicle class to manage movement
+        class Vehicle {
+            constructor(type, startPos, deliveryPoints, icon) {
+                this.type = type;
+                this.currentPos = startPos;
+                this.deliveryPoints = deliveryPoints;
+                this.icon = icon;
+                this.marker = L.marker(startPos, { icon: icon }).addTo(map);
+                this.currentPointIndex = 0;
+                this.isMoving = false;
+            }
+
+            startDelivery() {
+                if (this.currentPointIndex < this.deliveryPoints.length) {
+                    this.moveToNextPoint();
+                }
+            }
+
+            moveToNextPoint() {
+                if (this.isMoving || this.currentPointIndex >= this.deliveryPoints.length) return;
+
+                const nextPoint = this.deliveryPoints[this.currentPointIndex];
+                this.isMoving = true;
+
+                // Create routing control
+                const routingControl = L.Routing.control({
+                    waypoints: [
+                        L.latLng(this.currentPos),
+                        L.latLng(nextPoint)
+                    ],
+                    createMarker: () => null, // Suppress default markers
+                    lineOptions: {
+                        styles: [{ color: this.type === 'truck' ? 'blue' : 'green', opacity: 0.6, weight: 4 }]
+                    },
+                    show: false,
+                    addWaypoints: false
+                }).addTo(map);
+
+                routingControl.on('routesfound', (e) => {
+                    const route = e.routes[0].coordinates;
+                    this.animateAlongRoute(route, nextPoint, routingControl);
+                });
+            }
+
+            animateAlongRoute(route, nextPoint, routingControl) {
+                let step = 0;
+                const totalSteps = 100;
+                const interval = 50; // ms per step
+
+                const move = () => {
+                    if (step >= totalSteps) {
+                        this.isMoving = false;
+                        this.currentPos = nextPoint;
+                        this.currentPointIndex++;
+                        map.removeLayer(routingControl);
+                        // Simulate delivery time (2 seconds pause)
+                        setTimeout(() => {
+                            this.moveToNextPoint();
+                        }, 2000);
+                        return;
+                    }
+
+                    const t = step / totalSteps;
+                    const index = Math.floor(t * (route.length - 1));
+                    const nextIndex = Math.min(index + 1, route.length - 1);
+                    const frac = (t * (route.length - 1)) - index;
+
+                    // Interpolate position
+                    const lat = route[index].lat + frac * (route[nextIndex].lat - route[index].lat);
+                    const lng = route[index].lng + frac * (route[nextIndex].lng - route[index].lng);
+                    this.marker.setLatLng([lat, lng]);
+
+                    step++;
+                    setTimeout(move, interval);
+                };
+
+                move();
+            }
+        }
+
+        // Initialize vehicles
+        const deliveryPoints = generateDeliveryPoints(20); // 20 delivery points
+        const vehicles = [
+            new Vehicle('truck', [13.0827, 80.2707], deliveryPoints.slice(0, 5), truckIcon),
+            new Vehicle('truck', [13.09, 80.28], deliveryPoints.slice(5, 10), truckIcon),
+            new Vehicle('truck', [13.07, 80.25], deliveryPoints.slice(10, 15), truckIcon),
+            new Vehicle('van', [13.08, 80.26], deliveryPoints.slice(15, 18), vanIcon),
+            new Vehicle('van', [13.1, 80.27], deliveryPoints.slice(18, 20), vanIcon),
+            new Vehicle('van', [13.06, 80.29], deliveryPoints.slice(0, 3), vanIcon)
+        ];
+
+        // Start deliveries for all vehicles
+        vehicles.forEach(vehicle => vehicle.startDelivery());
+
+        // Add delivery points to map
+        deliveryPoints.forEach(point => {
+            L.circleMarker(point, {
+                radius: 5,
+                color: 'red',
+                fillOpacity: 0.8
+            }).addTo(map);
+        });
+    </script>
+</body>
+</html>

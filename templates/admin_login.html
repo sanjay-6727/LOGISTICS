@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - LogisticsPro</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #000000;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Login Container */
+        .login-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: transparent;
+            padding: 0 10%;
+        }
+
+        .login-box {
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 230, 118, 0.2);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .login-box h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.75rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(37, 37, 37, 0.8);
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-box input:focus {
+            outline: none;
+            border-color: #00e676;
+            box-shadow: 0 0 8px rgba(0, 230, 118, 0.4);
+        }
+
+        .login-box button {
+            background: linear-gradient(45deg, #00e676, #0288d1);
+            color: #fff;
+            padding: 1rem;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-box button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 230, 118, 0.5);
+        }
+
+        .login-box button:disabled {
+            background: linear-gradient(45deg, #4CAF50, #01579b);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .error {
+            color: #ff5252;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            text-shadow: 0 0 5px rgba(255, 82, 82, 0.3);
+        }
+
+        .back-link, .forgot-password {
+            color: #b0bec5;
+            text-decoration: none;
+            margin-top: 1.5rem;
+            display: inline-block;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover, .forgot-password:hover {
+            color: #00e676;
+            text-shadow: 0 0 5px rgba(0, 230, 118, 0.5);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 0 5%;
+            }
+
+            .login-box h2 {
+                font-size: 1.8rem;
+            }
+
+            .login-box input, .login-box button {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 0 5%;
+            }
+
+            .login-box {
+                padding: 2rem;
+            }
+
+            .login-box h2 {
+                font-size: 1.5rem;
+            }
+
+            .login-box input {
+                padding: 0.8rem;
+            }
+
+            .login-box button {
+                padding: 0.8rem;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Admin Login</h2>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" id="login-btn">Login</button>
+            </form>
+            <p id="error" class="error" style="display: none;"></p>
+            <p><a href="#" class="forgot-password">Forgot your password?</a></p>
+            <a href="{{ url_for('index') }}" class="back-link">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Base URL for API requests (configurable for different environments)
+        const API_BASE_URL = 'http://127.0.0.1:5000'; // Update for production
+
+        // Form submission
+        const form = document.getElementById('login-form');
+        const loginBtn = document.getElementById('login-btn');
+        const errorEl = document.getElementById('error');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loginBtn.disabled = true;
+            errorEl.style.display = 'none';
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                errorEl.textContent = 'Please fill in all fields';
+                errorEl.style.display = 'block';
+                loginBtn.disabled = false;
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (!response.ok) {
+                    if (response.status === 400) {
+                        const data = await response.json();
+                        throw new Error(data.message || 'Invalid request');
+                    } else if (response.status === 401) {
+                        throw new Error('Invalid admin credentials');
+                    } else if (response.status === 404) {
+                        throw new Error('Login endpoint not found. Please check the server configuration.');
+                    } else {
+                        throw new Error(`Server error: ${response.status}`);
+                    }
+                }
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    window.location.href = data.redirect || '/admin/dashboard';
+                } else {
+                    errorEl.textContent = data.message || 'Invalid admin credentials';
+                    errorEl.style.display = 'block';
+                }
+            } catch (error) {
+                errorEl.textContent = error.message || 'Network error. Please check your connection and try again.';
+                errorEl.style.display = 'block';
+            } finally {
+                loginBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

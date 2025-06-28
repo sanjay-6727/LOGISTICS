@@ -1,0 +1,15 @@
+2025-05-02 16:31:48,682 - __main__ - INFO - Loaded ETA model and label encoders successfully
+2025-05-02 16:31:49,039 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-02 16:31:49,039 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-05-02 16:31:49,042 - werkzeug - INFO -  * Restarting with stat
+2025-05-02 16:31:51,246 - __main__ - INFO - Loaded ETA model and label encoders successfully
+2025-05-02 16:31:51,276 - werkzeug - WARNING -  * Debugger is active!
+2025-05-02 16:31:51,282 - werkzeug - INFO -  * Debugger PIN: 610-071-487
+2025-05-02 16:31:53,524 - werkzeug - INFO - 127.0.0.1 - - [02/May/2025 16:31:53] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-05-02 16:31:53,660 - werkzeug - INFO - 127.0.0.1 - - [02/May/2025 16:31:53] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-05-02 16:31:53,672 - werkzeug - INFO - 127.0.0.1 - - [02/May/2025 16:31:53] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-05-02 16:31:53,737 - werkzeug - INFO - 127.0.0.1 - - [02/May/2025 16:31:53] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=ZdrU3UodgiQiKY9wWvmd HTTP/1.1" 200 -
+2025-05-02 16:31:53,758 - werkzeug - INFO - 127.0.0.1 - - [02/May/2025 16:31:53] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-05-02 16:31:59,341 - werkzeug - INFO -  * Detected change in 'c:\\Users\\sanja\\LOG\\logistics_app.py', reloading
+2025-05-02 16:31:59,710 - werkzeug - INFO -  * Restarting with stat
